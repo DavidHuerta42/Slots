@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>English Slots 🎰</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: #0d0520;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 20%, #2a0a4e55 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, #1a0a3e44 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.star {
+  position: absolute;
+  background: #fff;
+  border-radius: 50%;
+  animation: twinkle linear infinite;
+}
+@keyframes twinkle {
+  0%,100% { opacity: 0.1; }
+  50% { opacity: 0.8; }
+}
+
+#app {
+  width: 100%;
+  max-width: 520px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/*title*/
+.title-wrap {
+  text-align: center;
+}
+.title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 20px;
+  color: #FFD700;
+  text-shadow: 0 0 20px #FF8C00, 0 0 40px #FF8C0066;
+  letter-spacing: 2px;
+  line-height: 1.4;
+}
+.subtitle {
+  font-size: 14px;
+  color: #c9aaff;
+  margin-top: 8px;
+  letter-spacing: 1px;
+}
+
+/*machine*/
+.machine {
+  background: linear-gradient(160deg, #2d1a4a 0%, #1e0f35 100%);
+  border: 3px solid #FFD700;
+  border-radius: 24px;
+  padding: 1.5rem;
+  width: 100%;
+  box-shadow:
+    0 0 0 1px #FF8C0033,
+    0 0 40px #FFD70033,
+    inset 0 1px 0 #ffffff22,
+    inset 0 -1px 0 #00000044;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+}
+
+.machine::before {
+  content: '';
+  position: absolute;
+  top: -3px; left: 20%; right: 20%;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #FFD700, transparent);
+  border-radius: 999px;
+}
+
+/* lights bar*/
+.lights-bar {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  width: 100%;
+}
+.light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: blink-light 1s ease-in-out infinite;
+}
+.light:nth-child(odd) { background: #FF3B3B; animation-delay: 0s; }
+.light:nth-child(even) { background: #FFD700; animation-delay: 0.5s; }
+@keyframes blink-light {
+  0%,100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
+  50% { opacity: 0.2; box-shadow: none; }
+}
+
+/* reels*/
+.reels-frame {
+  background: #080215;
+  border: 3px solid #3d2060;
+  border-radius: 16px;
+  padding: 16px 12px;
+  width: 100%;
+  display: flex;
+  gap: 12px;
+  position: relative;
+  box-shadow: inset 0 4px 16px #00000099;
+}
+
+.payline {
+  position: absolute;
+  left: 0; right: 0;
+  top: 50%; transform: translateY(-50%);
+  height: 3px;
+  background: linear-gradient(90deg, transparent 0%, #ff3b3b88 15%, #ff3b3b 50%, #ff3b3b88 85%, transparent 100%);
+  pointer-events: none;
+}
+
+.reel {
+  flex: 1;
+  height: 100px;
+  background: #100530;
+  border-radius: 10px;
+  border: 2px solid #3d2060;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.3s;
+}
+
+.reel-inner {
+  font-size: 3.5rem;
+  line-height: 1;
+  transition: none;
+  user-select: none;
+}
+
+.reel.spinning .reel-inner {
+  animation: reel-spin 0.1s steps(1) infinite;
+}
+
+@keyframes reel-spin {
+  0%   { transform: translateY(0) scaleY(1); opacity: 1; }
+  25%  { transform: translateY(-8px) scaleY(0.8); opacity: 0.5; }
+  50%  { transform: translateY(0) scaleY(1); opacity: 1; }
+  75%  { transform: translateY(8px) scaleY(0.8); opacity: 0.5; }
+  100% { transform: translateY(0) scaleY(1); opacity: 1; }
+}
+
+.reel.win-glow {
+  border-color: #FFD700 !important;
+  box-shadow: 0 0 20px #FFD70066, inset 0 0 10px #FFD70022;
+  animation: reel-pulse 0.6s ease-in-out infinite alternate;
+}
+
+@keyframes reel-pulse {
+  from { box-shadow: 0 0 10px #FFD70066; }
+  to   { box-shadow: 0 0 30px #FFD700, 0 0 60px #FF8C0044; }
+}
+
+/* status*/
+.status {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #9a7abf;
+  text-align: center;
+  min-height: 1.4em;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+.status.win   { color: #FFD700; text-shadow: 0 0 10px #FF8C00; }
+.status.bonus { color: #00E676; text-shadow: 0 0 10px #00E67666; }
+.status.ready { color: #c9aaff; }
+
+/* button */
+.btn-spin {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 14px;
+  background: linear-gradient(135deg, #FF4444 0%, #CC0000 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 0;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: 0 6px 0 #880000, 0 0 20px #FF3B3B55;
+  transition: transform 0.1s, box-shadow 0.1s;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-spin::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #ffffff22, transparent);
+  transition: left 0.4s;
+}
+.btn-spin:hover::before { left: 150%; }
+.btn-spin:hover:not(:disabled) { box-shadow: 0 6px 0 #880000, 0 0 30px #FF3B3B88; }
+.btn-spin:active:not(:disabled) { transform: translateY(5px); box-shadow: 0 1px 0 #880000; }
+.btn-spin:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/*stats*/
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.stat-box {
+  background: #1e0f35;
+  border: 1.5px solid #3d2060;
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+}
+.stat-box .val {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 16px;
+  color: #FFD700;
+}
+.stat-box .lbl {
+  font-size: 10px;
+  color: #7a5a9f;
+  margin-top: 5px;
+}
+
+
+.paytable {
+  background: #1e0f35;
+  border: 1.5px solid #3d2060;
+  border-radius: 12px;
+  padding: 12px 16px;
+  width: 100%;
+}
+.paytable-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  color: #7a5a9f;
+  margin-bottom: 10px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+.pay-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+  font-size: 12px;
+  color: #c9aaff;
+  border-bottom: 1px solid #3d206033;
+}
+.pay-row:last-child { border-bottom: none; }
+.pay-badge {
+  font-size: 11px;
+  background: #00E67622;
+  color: #00E676;
+  border: 1px solid #00E67644;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-weight: 700;
+}
+
+/* overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000dd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+  padding: 1rem;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.question-card {
+  background: linear-gradient(160deg, #2d1a4a 0%, #1e0f35 100%);
+  border: 3px solid #FFD700;
+  border-radius: 20px;
+  padding: 1.75rem;
+  max-width: 480px;
+  width: 100%;
+  box-shadow: 0 0 60px #FFD70044, 0 20px 60px #00000099;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  animation: popIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes popIn {
+  from { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.q-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  color: #0d0520;
+  background: #FFD700;
+  border-radius: 30px;
+  padding: 8px 16px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+.q-combo {
+  font-size: 24px;
+  text-align: center;
+}
+.q-combo-label {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  color: #FFD700;
+  text-align: center;
+  text-shadow: 0 0 10px #FF8C00;
+}
+
+.q-text {
+  font-size: 17px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.answer-btn {
+  background: #100530;
+  border: 2px solid #3d2060;
+  border-radius: 12px;
+  padding: 12px 16px;
+  color: #d0b0ff;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+  width: 100%;
+}
+.answer-btn:hover:not(:disabled) {
+  border-color: #FFD700;
+  background: #2a1050;
+  transform: translateX(4px);
+}
+.answer-btn.correct {
+  border-color: #00E676;
+  background: #003320;
+  color: #00E676;
+}
+.answer-btn.wrong {
+  border-color: #FF3B3B;
+  background: #330010;
+  color: #FF3B3B;
+}
+.answer-btn:disabled { cursor: default; transform: none; }
+
+.q-explain {
+  font-size: 13px;
+  color: #9a7abf;
+  text-align: center;
+  line-height: 1.5;
+  min-height: 1.4em;
+  padding: 8px 12px;
+  background: #ffffff08;
+  border-radius: 8px;
+}
+.q-explain.ok  { color: #00E676; background: #00E67611; }
+.q-explain.nok { color: #FF6B6B; background: #FF3B3B11; }
+
+.btn-continue {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 11px;
+  background: #FFD700;
+  color: #0d0520;
+  border: none;
+  border-radius: 10px;
+  padding: 14px;
+  cursor: pointer;
+  text-align: center;
+  display: none;
+  transition: opacity 0.15s, transform 0.1s;
+  letter-spacing: 1px;
+}
+.btn-continue:hover { opacity: 0.85; transform: scale(1.02); }
+
+#confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+} 
+/*popup*/
+.score-popup {
+  position: fixed;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 18px;
+  color: #00E676;
+  text-shadow: 0 0 10px #00E676;
+  pointer-events: none;
+  z-index: 1001;
+  animation: floatUp 1.2s ease-out forwards;
+}
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-80px) scale(1.4); }
+}
+</style>
+</head>
+<body>
+
+
+<div class="stars" id="stars"></div>
+<canvas id="confetti-canvas"></canvas>
+
+<div id="app">
+  <div class="title-wrap">
+    <div class="title">🎰 ENGLISH SLOTS 🎰</div>
+    <div class="subtitle">Gira y aprende inglés ✨</div>
+  </div>
+
+  <div class="machine">
+    <div class="lights-bar" id="lights"></div>
+
+    <div class="reels-frame">
+      <div class="payline"></div>
+      <div class="reel" id="r0"><div class="reel-inner" id="ri0">🍒</div></div>
+      <div class="reel" id="r1"><div class="reel-inner" id="ri1">🍋</div></div>
+      <div class="reel" id="r2"><div class="reel-inner" id="ri2">🔔</div></div>
+    </div>
+
+    <div class="status ready" id="status">¡Pulsa SPIN para jugar!</div>
+    <button class="btn-spin" id="btn-spin">► SPIN ◄</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat-box"><div class="val" id="s-spins">0</div><div class="lbl">Tiradas</div></div>
+    <div class="stat-box"><div class="val" id="s-bonus">0</div><div class="lbl">Bonus</div></div>
+    <div class="stat-box"><div class="val" id="s-correct">0</div><div class="lbl">Correctas</div></div>
+    <div class="stat-box"><div class="val" id="s-streak">0</div><div class="lbl">Racha 🔥</div></div>
+  </div>
+
+  <div class="paytable">
+    <div class="paytable-title">— COMBINACIONES BONUS —</div>
+    <div class="pay-row"><span>7️⃣ 7️⃣ 7️⃣  Triple 7</span><span class="pay-badge">BONUS!</span></div>
+    <div class="pay-row"><span>💎 💎 💎  Triple Diamante</span><span class="pay-badge">BONUS!</span></div>
+    <div class="pay-row"><span>Cualquier triple igual</span><span class="pay-badge">BONUS!</span></div>
+    <div class="pay-row"><span>⭐ Estrella en cualquier carrete</span><span class="pay-badge">BONUS!</span></div>
+  </div>
+</div>
+
+<script>
+// Stars background
+const starsEl = document.getElementById('stars');
+for (let i = 0; i < 80; i++) {
+  const s = document.createElement('div');
+  s.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-duration:${Math.random()*3+2}s;animation-delay:${Math.random()*3}s;`;
+  starsEl.appendChild(s);
+}
+
+//Lights bar
+const lightsEl = document.getElementById('lights');
+for (let i = 0; i < 14; i++) {
+  const l = document.createElement('div');
+  l.className = 'light';
+  lightsEl.appendChild(l);
+}
+
+const SYMBOLS = ['7️⃣','🍒','🍋','🔔','💎','🍀','🎯','🍇'];
+
+const QUESTIONS = [
+  { q:'What is the past tense of "go"?', opts:['Goed','Went','Gone','Going'], correct:1, explain:'✅ "Went" es el pasado irregular de "go".' },
+  { q:'Choose the correct sentence:', opts:["She don't like coffee","She doesn't likes coffee","She doesn't like coffee","She not like coffee"], correct:2, explain:'✅ Con he/she/it usamos "doesn\'t + verbo base".' },
+  { q:'What does "exhausted" mean?', opts:['Excited','Very tired','Confused','Bored'], correct:1, explain:'✅ "Exhausted" = extremadamente cansado.' },
+  { q:'"I ___ to the gym yesterday"', opts:['go','goes','went','gone'], correct:2, explain:'✅ Pasado simple de go = went.' },
+  { q:'Synonym of "happy":', opts:['Sad','Angry','Joyful','Tired'], correct:2, explain:'✅ "Joyful" significa muy feliz.' },
+  { q:'Plural of "child"?', opts:['Childs','Children','Childrens','Childer'], correct:1, explain:'✅ Plural irregular: child → children.' },
+  { q:'"I have been living here ___ 5 years"', opts:['since','for','ago','during'], correct:1, explain:'✅ "For" se usa con periodos de tiempo.' },
+  { q:'What does "approximately" mean?', opts:['Exactly','Never','Around / about','Always'], correct:2, explain:'✅ "Approximately" = aproximadamente, alrededor de.' },
+  { q:'Correct question form?', opts:['Where you live?','Where do you live?','Where does you live?','Where you are living?'], correct:1, explain:'✅ Preguntas en presente simple: auxiliar "do/does".' },
+  { q:'Opposite of "ancient"?', opts:['Old','Modern','Historic','Antique'], correct:1, explain:'✅ "Modern" es el antónimo de "ancient".' },
+  { q:'"She ___ her keys. She can\'t find them."', opts:['lose','lost','loses','has lost'], correct:3, explain:'✅ Presente perfecto: acción pasada con resultado presente.' },
+  { q:'What does "generous" mean?', opts:['Greedy','Kind / giving','Lazy','Brave'], correct:1, explain:'✅ "Generous" = generoso, dispuesto a dar.' },
+  { q:'Which is correct?', opts:['I am agree','I agree','I agreeing','I am agreed'], correct:1, explain:'✅ "Agree" no se usa con "be" en inglés.' },
+  { q:'"We ___ dinner when he called."', opts:['had','were having','have','are having'], correct:1, explain:'✅ Pasado continuo: acción en progreso en el pasado.' },
+  { q:'What is "to procrastinate"?', opts:['To rush','To delay tasks','To plan ahead','To forget'], correct:1, explain:'✅ "Procrastinate" = posponer tareas sin necesidad.' },
+  { q:'What does "enormous" mean?', opts:['Tiny','Very large','Strange','Fast'], correct:1, explain:'✅ "Enormous" = enorme, muy grande.' },
+  { q:'"___ you ever been to London?"', opts:['Did','Do','Have','Are'], correct:2, explain:'✅ Presente perfecto experiencial: Have you ever...?' },
+  { q:'Correct spelling?', opts:['Accomodate','Accommodate','Acommodate','Acomodate'], correct:1, explain:'✅ "Accommodate" tiene doble c y doble m.' },
+  { q:'What does "stubborn" mean?', opts:['Friendly','Clever','Obstinate','Shy'], correct:2, explain:'✅ "Stubborn" = terco, obstinado.' },
+  { q:'"She ___ a doctor for 10 years."', opts:['is','was','has been','have been'], correct:2, explain:'✅ "Has been" — presente perfecto con duración.' },
+  { q:'What is the comparative of "good"?', opts:['Gooder','More good','Better','Best'], correct:2, explain:'✅ Comparativo irregular: good → better → best.' },
+  { q:'What does "melancholy" mean?', opts:['Very happy','Deep sadness','Great anger','Pure joy'], correct:1, explain:'✅ "Melancholy" = melancolía, tristeza profunda.' },
+  { q:'"If I ___ rich, I would travel the world."', opts:['am','was','were','be'], correct:2, explain:'✅ Condicional 2: If + were (subjuntivo para irreales).' },
+  { q:'What does "eloquent" mean?', opts:['Quiet','Speaking very well','Rude','Confused'], correct:1, explain:'✅ "Eloquent" = elocuente, que habla con fluidez y persuasión.' },
+];
+
+// state
+let state = { spins:0, bonus:0, correct:0, streak:0 };
+let usedQ = new Set();
+let spinning = false;
+let spinIntervals = [];
+
+const reelEls  = [0,1,2].map(i => document.getElementById('r'+i));
+const innerEls = [0,1,2].map(i => document.getElementById('ri'+i));
+const statusEl  = document.getElementById('status');
+const btnSpin   = document.getElementById('btn-spin');
+
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// Spin logic 
+function buildResult() {
+  // ~55% chance of bonus
+  if (Math.random() < 0.55) {
+    const type = Math.floor(Math.random() * 4);
+    if (type === 0) return ['7️⃣','7️⃣','7️⃣'];
+    if (type === 1) return ['💎','💎','💎'];
+    if (type === 2) { const s = rand(SYMBOLS); return [s,s,s]; }
+    // star in random position
+    const r = [rand(SYMBOLS), rand(SYMBOLS), rand(SYMBOLS)];
+    r[Math.floor(Math.random()*3)] = '⭐';
+    return r;
+  }
+  return [rand(SYMBOLS), rand(SYMBOLS), rand(SYMBOLS)];
+}
+
+function detectCombo(result) {
+  if (result[0]==='7️⃣' && result[1]==='7️⃣' && result[2]==='7️⃣')
+    return { label:'🎉 TRIPLE 7 🎉', bonus:true };
+  if (result[0]==='💎' && result[1]==='💎' && result[2]==='💎')
+    return { label:'💎 TRIPLE DIAMANTE 💎', bonus:true };
+  if (result[0]===result[1] && result[1]===result[2])
+    return { label:'🎉 TRIPLE '+result[0]+'!', bonus:true };
+  if (result.includes('⭐'))
+    return { label:'⭐ BONUS STAR!', bonus:true };
+  if (result[0]===result[1] || result[1]===result[2] || result[0]===result[2])
+    return { label:'Par — ¡casi!', bonus:false };
+  return null;
+}
+
+function doSpin() {
+  if (spinning) return;
+  spinning = true;
+  btnSpin.disabled = true;
+  state.spins++;
+  document.getElementById('s-spins').textContent = state.spins;
+
+  reelEls.forEach(r => { r.classList.remove('win-glow'); r.classList.add('spinning'); });
+  setStatus('Girando...', '');
+
+  const result = buildResult();
+
+  spinIntervals.forEach(clearInterval);
+  spinIntervals = innerEls.map((ri, i) => {
+    const iv = setInterval(() => { ri.textContent = rand(SYMBOLS); }, 80);
+    setTimeout(() => {
+      clearInterval(iv);
+      reelEls[i].classList.remove('spinning');
+      ri.textContent = result[i];
+      if (i === 2) afterSpin(result);
+    }, 800 + i * 350);
+    return iv;
+  });
+}
+
+function afterSpin(result) {
+  spinning = false;
+  btnSpin.disabled = false;
+
+  const combo = detectCombo(result);
+  if (combo && combo.bonus) {
+    state.bonus++;
+    document.getElementById('s-bonus').textContent = state.bonus;
+    reelEls.forEach(r => r.classList.add('win-glow'));
+    setStatus(combo.label + ' — ¡Pregunta!', 'bonus');
+    setTimeout(() => showQuestion(combo), 800);
+  } else if (combo) {
+    setStatus(combo.label + ' — Sigue intentando!', 'win');
+  } else {
+    setStatus('Sin combinación... ¡Suerte!', 'ready');
+  }
+}
+
+function setStatus(msg, cls) {
+  statusEl.textContent = msg;
+  statusEl.className = 'status ' + cls;
+}
+
+// Question modal
+function getQuestion() {
+  if (usedQ.size >= QUESTIONS.length) usedQ.clear();
+  let idx;
+  do { idx = Math.floor(Math.random() * QUESTIONS.length); } while (usedQ.has(idx));
+  usedQ.add(idx);
+  return QUESTIONS[idx];
+}
+
+function showQuestion(combo) {
+  const q = getQuestion();
+
+  const overlay = document.createElement('div');
+  overlay.className = 'overlay';
+  overlay.innerHTML = `
+    <div class="question-card">
+      <div class="q-badge">🎓 BONUS ENGLISH QUESTION</div>
+      <div class="q-combo">${combo.label.replace(/[a-zA-Z!¡ ]+/g,'').trim() || '⭐'}</div>
+      <div class="q-combo-label">${combo.label}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="answers" id="qa">
+        ${q.opts.map((o,i) => `<button class="answer-btn" data-i="${i}">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}
+      </div>
+      <div class="q-explain" id="qexp"></div>
+      <button class="btn-continue" id="qcont">CONTINUAR ►</button>
+    </div>`;
+  document.body.appendChild(overlay);
+
+  let answered = false;
+  overlay.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (answered) return;
+      answered = true;
+      const chosen = parseInt(btn.dataset.i);
+      overlay.querySelectorAll('.answer-btn').forEach(b => b.disabled = true);
+      const expEl  = document.getElementById('qexp');
+      const contEl = document.getElementById('qcont');
+
+      if (chosen === q.correct) {
+        btn.classList.add('correct');
+        state.correct++; state.streak++;
+        document.getElementById('s-correct').textContent = state.correct;
+        document.getElementById('s-streak').textContent  = state.streak;
+        expEl.className = 'q-explain ok';
+        expEl.textContent = q.explain;
+        launchConfetti();
+        showScorePopup('+1 ⭐');
+      } else {
+        btn.classList.add('wrong');
+        overlay.querySelectorAll('.answer-btn')[q.correct].classList.add('correct');
+        state.streak = 0;
+        document.getElementById('s-streak').textContent = 0;
+        expEl.className = 'q-explain nok';
+        expEl.textContent = '❌ Era: ' + q.opts[q.correct] + ' — ' + q.explain.replace('✅ ','');
+      }
+      contEl.style.display = 'block';
+    });
+  });
+
+  document.getElementById('qcont').addEventListener('click', () => {
+    overlay.remove();
+    reelEls.forEach(r => r.classList.remove('win-glow'));
+    setStatus('¡Pulsa SPIN para seguir!', 'ready');
+  });
+}
+
+// Score popup
+function showScorePopup(text) {
+  const el = document.createElement('div');
+  el.className = 'score-popup';
+  el.textContent = text;
+  el.style.cssText = `left:${40+Math.random()*20}%;top:40%;`;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1300);
+}
+
+// Confetti 
+const canvas = document.getElementById('confetti-canvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+let rafId = null;
+
+function launchConfetti() {
+  canvas.width  = window.innerWidth;
+  canvas.height = window.innerHeight;
+  particles = Array.from({ length: 120 }, () => ({
+    x: Math.random() * canvas.width,
+    y: -20,
+    vx: (Math.random() - 0.5) * 5,
+    vy: Math.random() * 5 + 2,
+    color: ['#FFD700','#FF3B3B','#00E676','#c084fc','#38bdf8','#fb923c'][Math.floor(Math.random()*6)],
+    w: Math.random() * 10 + 4,
+    h: Math.random() * 6 + 3,
+    rot: Math.random() * 360,
+    vr: (Math.random() - 0.5) * 10,
+    life: 1,
+  }));
+  if (rafId) cancelAnimationFrame(rafId);
+  animConfetti();
+}
+
+function animConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  particles = particles.filter(p => p.life > 0 && p.y < canvas.height + 30);
+  particles.forEach(p => {
+    p.x  += p.vx; p.y  += p.vy;
+    p.rot += p.vr; p.life -= 0.01;
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle   = p.color;
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rot * Math.PI / 180);
+    ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+    ctx.restore();
+  });
+  if (particles.length > 0) rafId = requestAnimationFrame(animConfetti);
+  else ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// init 
+btnSpin.addEventListener('click', doSpin);
+</script>
+</body>
+</html>
